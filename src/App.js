@@ -9,7 +9,9 @@ class App extends Component{
     }
    render(){
      return(
-       <div> 这是父组件</div>
+       <div> 这是父组件
+         <div>子组件</div>
+       </div>
      )
    } 
 }
