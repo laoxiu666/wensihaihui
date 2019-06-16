@@ -12,6 +12,7 @@ class App extends Component{
        <div> 这是父组件
          <div>子组件</div>
          <div>经理操作</div>
+         <div>经理这是我的操作</div>
        </div>
      )
    } 
