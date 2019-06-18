@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { List, InputItem, Toast } from 'antd-mobile';
+// import ReactDOM from 'react-dom';
+import { List, InputItem, Toast , Button} from 'antd-mobile';
 import 'antd-mobile/dist/antd-mobile.css'
 // import { List, InputItem, WhiteSpace } from 'antd-mobile';
 import { createForm } from 'rc-form';
-class App extends React.Component {
+const Item = List.Item;
+class App1 extends React.Component {
   state = {
     hasError: false,
     value: '',
@@ -28,13 +29,66 @@ class App extends React.Component {
       value,
     });
   }
+
+
+
+
+  onSubmit = () => {
+    this.props.form.validateFields({ force: true }, (error) => {
+      if (!error) {
+        console.log(this.props.form.getFieldsValue());
+      } else {
+        // alert('Validation failed');
+        Toast.info('错误，提交失败');
+      }
+    });
+  }
+
+  onReset = () => {
+    this.props.form.resetFields();
+    console.log(111);
+    
+    console.log(this.props.form);
+    
+  }
+  validateAccount = (rule, value, callback) => {
+    if (value && value.length > 4) {
+      callback();
+    } else {
+      callback(new Error('至少六位数'));
+    }
+  }
   render() {
-    const { getFieldProps } = this.props.form;
+    const { getFieldProps,getFieldError } = this.props.form;
     return (
       
       <div>
         <List renderHeader={() => 'Confirm when typing'}>
+           {/* =================================== */}
 
+<InputItem
+          {...getFieldProps('account', {
+            // initialValue: 'little ant',
+            rules: [
+              { required: true, message: '请输入关键字' },
+              { validator: this.validateAccount },
+            ],
+          })}
+          clear
+          error={!!getFieldError('account')}
+          onErrorClick={() => {
+            console.log(2222);
+            
+            // alert(getFieldError('account').join('、'),1);
+            Toast.info(getFieldError('account').join('、'));
+            // if (this.state.hasError) {
+            //   Toast.info('请输入字');
+            // }
+          }}
+          placeholder="please input account"
+        >姓名</InputItem>
+
+           {/* ====================== */}
            <InputItem
             {...getFieldProps('autofocus')}
             clear
@@ -44,16 +98,22 @@ class App extends React.Component {
 
           <InputItem
             type="phone"
+            clear
             placeholder="input your phone"
             error={this.state.hasError}
             onErrorClick={this.onErrorClick}
             onChange={this.onChange}
             value={this.state.value}
           >手机号码</InputItem>
+
+           <Item>
+          <Button type="primary" size="small" inline onClick={this.onSubmit}>Submit</Button>
+          <Button size="small" inline style={{ marginLeft: '2.5px' }} onClick={this.onReset}>Reset</Button>
+        </Item>
         </List>
       </div>
     );
   }
 }
-
+const App = createForm()(App1);
 export default App
