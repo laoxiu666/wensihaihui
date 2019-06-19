@@ -15,47 +15,54 @@ class App1 extends React.Component {
       Toast.info('Please enter 11 digits');
     }
   }
-  onChange = (value) => {
-    if (value.replace(/\s/g, '').length < 11) {
-      this.setState({
-        hasError: true,
-      });
-    } else {
-      this.setState({
-        hasError: false,
-      });
-    }
-    this.setState({
-      value,
-    });
-  }
+  // onChange = (value) => {
+  //   if (value.replace(/\s/g, '').length < 11) {
+  //     this.setState({
+  //       hasError: true,
+  //     });
+  //   } else {
+  //     this.setState({
+  //       hasError: false,
+  //     });
+  //   }
+  //   this.setState({
+  //     value,
+  //   });
+  // }
 
 
 
 
   onSubmit = () => {
+    console.log(3);
     this.props.form.validateFields({ force: true }, (error) => {
       if (!error) {
+        console.log(6);
         console.log(this.props.form.getFieldsValue());
       } else {
         // alert('Validation failed');
-        Toast.info('错误，提交失败');
+        console.log(7);
+        Toast.info('提交失败,请将信息填完整');
       }
     });
   }
 
   onReset = () => {
     this.props.form.resetFields();
-    console.log(111);
+    
     
     console.log(this.props.form);
     
   }
   validateAccount = (rule, value, callback) => {
+    console.log(2);
     if (value && value.length > 4) {
+      console.log(999);
       callback();
     } else {
-      callback(new Error('至少六位数'));
+      console.log(111);
+      //这里回调是下面的那个对应标签的onErrorClick
+      callback(); 
     }
   }
   render() {
@@ -66,21 +73,23 @@ class App1 extends React.Component {
         <List renderHeader={() => 'Confirm when typing'}>
            {/* =================================== */}
 
-<InputItem
-          {...getFieldProps('account', {
+         <InputItem
+          {...getFieldProps('userName', {
             // initialValue: 'little ant',
             rules: [
-              { required: true, message: '请输入关键字' },
+              { required: true, message: '姓名不能为空' },
+              { whitespace: true },
               { validator: this.validateAccount },
             ],
           })}
           clear
-          error={!!getFieldError('account')}
+          error={!!getFieldError('userName')}
           onErrorClick={() => {
             console.log(2222);
-            
+            console.log(getFieldError('userName'));
+            // getFieldError('account')="姓名不能为空1"
             // alert(getFieldError('account').join('、'),1);
-            Toast.info(getFieldError('account').join('、'));
+            Toast.info(getFieldError('userName').join('、'));
             // if (this.state.hasError) {
             //   Toast.info('请输入字');
             // }
@@ -88,6 +97,32 @@ class App1 extends React.Component {
           placeholder="please input account"
         >姓名</InputItem>
 
+
+
+             <InputItem
+          {...getFieldProps('shcool', {
+            // initialValue: 'little ant',
+            rules: [
+              { required: true, message: '学校不能为空' },
+              { whitespace: true },
+              { validator: this.validateAccount },
+            ],
+          })}
+          clear
+          error={!!getFieldError('shcool')}
+          onErrorClick={() => {
+            console.log(2222);
+            console.log(getFieldError('shcool'));
+            // getFieldError('account')="姓名不能为空1"
+            // alert(getFieldError('account').join('、'),1);
+            // Toast.info(getFieldError('shcool').join('、'));
+            Toast.info(getFieldError('shcool'));
+            // if (this.state.hasError) {
+            //   Toast.info('请输入字');
+            // }
+          }}
+          placeholder="please input account"
+        >学校</InputItem>
            {/* ====================== */}
            <InputItem
             {...getFieldProps('autofocus')}
