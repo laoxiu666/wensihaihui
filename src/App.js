@@ -68,8 +68,6 @@ class App1 extends React.Component {
     console.log(val);
     let colNum = 1;
     const d = [...this.state.data];
-    console.log(d);
-    
     const asyncValue = [...val];
     if (val[0] === 'zj') {
       d.forEach((i) => {
