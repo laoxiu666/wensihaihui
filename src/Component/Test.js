@@ -5,10 +5,17 @@ export default class Test extends Component {
     constructor(props) {
       super(props)
       this.state = {
-        
+        time:new Date()
       }
       console.log("construct");
       // console.log(this.setStatew)
+      // this.timeId=setInterval(this.tick,1000)
+
+    }
+    tick=()=>{
+      this.setState({
+        time:new Date()
+      })
     }
 
     componentDidMount(){
@@ -32,12 +39,13 @@ export default class Test extends Component {
       
     }
     shouldComponentUpdate(){
-      console.log("组件需要更新吗    ComponentUpdate");
+      console.log("组件需要更新吗    shouldComponentUpdate");
       return true
     }
     
    componentWillUnmount(){
      console.log('组件将要卸载   WillUnmount');
+     clearInterval (this.timeId)
      
    }
     render(){
@@ -45,6 +53,8 @@ export default class Test extends Component {
 
       return(
         <div>test
+
+         <p>{this.state.time.getSeconds()}</p>
           <button type='button' onClick={()=>{this.setState({})}}>点击更新</button>
           <button type='button' onClick={()=>{this.forceUpdate( )}}>点击更新</button>
         </div>
