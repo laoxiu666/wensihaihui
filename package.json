@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^3.10.1",
     "antd-mobile": "^2.2.5",
+    "antd-mobile-demo-data": "^0.2.0",
     "customize-cra": "^0.2.13",
     "rc-form": "^2.2.1",
     "react": "^16.4.2",

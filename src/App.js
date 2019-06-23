@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { List, InputItem, Toast , Button} from 'antd-mobile';
+import { List, InputItem, Toast , Button,Picker} from 'antd-mobile';
+import {  provinceLite } from 'antd-mobile-demo-data';
+import arrayTreeFilter from 'array-tree-filter';
 import 'antd-mobile/dist/antd-mobile.css'
 // import { List, InputItem, WhiteSpace } from 'antd-mobile';
 import { createForm } from 'rc-form';
@@ -15,23 +17,30 @@ class App1 extends React.Component {
       Toast.info('Please enter 11 digits');
     }
   }
-  // onChange = (value) => {
-  //   if (value.replace(/\s/g, '').length < 11) {
-  //     this.setState({
-  //       hasError: true,
-  //     });
-  //   } else {
-  //     this.setState({
-  //       hasError: false,
-  //     });
+  onChange = (value) => {
+    if (value.replace(/\s/g, '').length < 11) {
+      this.setState({
+        hasError: true,
+      });
+    } else {
+      this.setState({
+        hasError: false,
+      });
+    }
+    this.setState({
+      value,
+    });
+  }
+
+
+  // getSel() {
+  //   const value = this.state.pickerValue;
+  //   if (!value) {
+  //     return '';
   //   }
-  //   this.setState({
-  //     value,
-  //   });
+  //   const treeChildren = arrayTreeFilter(district, (c, level) => c.value === value[level]);
+  //   return treeChildren.map(v => v.label).join(',');
   // }
-
-
-
 
   onSubmit = () => {
     console.log(3);
@@ -47,24 +56,68 @@ class App1 extends React.Component {
     });
   }
 
-  onReset = () => {
-    this.props.form.resetFields();
+  onClick = () => {
+    setTimeout(() => {
+      this.setState({
+        data: provinceLite,
+      });
+    }, 120);
+  };
+
+  onPickerChange = (val) => {
+    console.log(val);
+    let colNum = 1;
+    const d = [...this.state.data];
+    console.log(d);
     
-    
-    console.log(this.props.form);
-    
-  }
-  validateAccount = (rule, value, callback) => {
-    console.log(2);
-    if (value && value.length > 4) {
-      console.log(999);
-      callback();
+    const asyncValue = [...val];
+    if (val[0] === 'zj') {
+      d.forEach((i) => {
+        if (i.value === 'zj') {
+          colNum = 2;
+          if (!i.children) {
+            i.children = [{
+              value: 'zj-nb',
+              label: '宁波',
+            }, {
+              value: 'zj-hz',
+              label: '杭州',
+            }];
+            asyncValue.push('zj-nb');
+          } else if (val[1] === 'zj-hz') {
+            i.children.forEach((j) => {
+              if (j.value === 'zj-hz') {
+                j.children = [{
+                  value: 'zj-hz-xh',
+                  label: '西湖区',
+                }];
+                asyncValue.push('zj-hz-xh');
+              }
+            });
+            colNum = 3;
+          }
+        }
+      });
     } else {
-      console.log(111);
-      //这里回调是下面的那个对应标签的onErrorClick
-      callback(); 
+      colNum = 1;
     }
-  }
+    this.setState({
+      data: d,
+      cols: colNum,
+      asyncValue,
+    });
+  };
+  // validateAccount = (rule, value, callback) => {
+  //   console.log(2);
+  //   if (value && value.length > 4) {
+  //     console.log(999);
+  //     callback();
+  //   } else {
+  //     console.log(111);
+  //     //这里回调是下面的那个对应标签的onErrorClick
+  //     callback(); 
+  //   }
+  // }
   render() {
     const { getFieldProps,getFieldError } = this.props.form;
     return (
@@ -72,6 +125,40 @@ class App1 extends React.Component {
       <div>
         <List renderHeader={() => 'Confirm when typing'}>
            {/* =================================== */}
+         
+           <InputItem
+            type="phone"
+            clear
+            placeholder="input your phone"
+            error={this.state.hasError}
+            onErrorClick={this.onErrorClick}
+            onChange={this.onChange}
+            value={this.state.value}
+          >手机号码</InputItem>
+         
+
+          <Picker
+          data={this.state.data}
+          cols={this.state.cols}
+          value={this.state.asyncValue}
+          onPickerChange={this.onPickerChange}
+          // onOk={v => console.log(v)}
+        >
+          <List.Item arrow="horizontal" onClick={this.onClick}>Multiple & async</List.Item>
+        </Picker>
+
+          {/* <Picker
+          visible={this.state.visible}
+          data={district}
+          value={this.state.pickerValue}
+          onChange={v => this.setState({ pickerValue: v })}
+          onOk={() => this.setState({ visible: false })}
+          onDismiss={() => this.setState({ visible: false })}
+        >
+          <List.Item extra={this.getSel()} onClick={() => this.setState({ visible: true })}>
+            Visible state
+          </List.Item>
+        </Picker> */}
 
          <InputItem
           {...getFieldProps('userName', {
@@ -131,15 +218,7 @@ class App1 extends React.Component {
             ref={el => this.autoFocusInst = el}
           >标题</InputItem>
 
-          <InputItem
-            type="phone"
-            clear
-            placeholder="input your phone"
-            error={this.state.hasError}
-            onErrorClick={this.onErrorClick}
-            onChange={this.onChange}
-            value={this.state.value}
-          >手机号码</InputItem>
+          
 
            <Item>
           <Button type="primary" size="small" inline onClick={this.onSubmit}>Submit</Button>
