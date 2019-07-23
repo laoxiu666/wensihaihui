@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
-import { List, InputItem, Toast , Button} from 'antd-mobile';
+import { List, InputItem, Toast , Button,Switch} from 'antd-mobile';
+import styles from './test.scss'
 import 'antd-mobile/dist/antd-mobile.css'
 // import { List, InputItem, WhiteSpace } from 'antd-mobile';
 import { createForm } from 'rc-form';
@@ -16,7 +17,7 @@ class App1 extends React.Component {
     }
   }
   onChange = (value) => {
-    if (value.replace(/\s/g, '').length < 11) {
+    if (value.replace (/\s/g, '').length < 11) {
       this.setState({
         hasError: true,
       });
@@ -105,12 +106,24 @@ class App1 extends React.Component {
             onChange={this.onChange}
             value={this.state.value}
           >手机号码</InputItem>
+        
+        <List.Item
+          extra={<Switch
+            checked={this.state.checked}
+            onChange={() => {
+              this.setState({
+                checked: !this.state.checked,
+              });
+            }}
+          />}
+        >Off</List.Item>
 
            <Item>
           <Button type="primary" size="small" inline onClick={this.onSubmit}>Submit</Button>
           <Button size="small" inline style={{ marginLeft: '2.5px' }} onClick={this.onReset}>Reset</Button>
         </Item>
         </List>
+        <div className={`${styles.bot}`}>这是</div>
       </div>
     );
   }
