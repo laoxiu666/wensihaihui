@@ -1,0 +1,10 @@
+:global .ant-fullcalendar-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.priceBtn {
+  color: red;
+}
+/*# sourceMappingURL=app.css.map */

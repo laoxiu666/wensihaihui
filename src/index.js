@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './modules/hotelAdd/pages/App';
 import * as serviceWorker from './serviceWorker';
 
 // class App extends Component {
